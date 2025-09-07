@@ -70,7 +70,7 @@ export default function UserProfilePage() {
     setIsLoading(true);
 
     // Fetch current user's basic data
-    fetch(`http://localhost:4000/api/users/${currentUserId}`)
+    fetch(`/api/users/${currentUserId}`)
       .then((res) => res.json())
       .then((userData) => {
         if (userData) {
@@ -82,7 +82,7 @@ export default function UserProfilePage() {
 
           // Fetch detailed profile data
           return fetch(
-            `http://localhost:4000/api/users/${currentUserId}/profile`,
+            `/api/users/${currentUserId}/profile`,
           );
         }
       })
