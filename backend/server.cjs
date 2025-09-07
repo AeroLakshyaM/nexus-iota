@@ -352,7 +352,7 @@ async function initDb() {
 initDb().catch((e) => {
   // eslint-disable-next-line no-console
   console.error('DB init failed', e);
-  process.exit(1);
+  console.warn('Continuing without completing DB initialization. Some features may be limited.');
 });
 
 // Routes
