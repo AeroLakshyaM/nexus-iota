@@ -69,7 +69,7 @@ function SwapRequestModal({
         return;
       }
 
-      const response = await fetch("http://localhost:4000/api/swap-requests", {
+      const response = await fetch("/api/swap-requests", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -214,8 +214,8 @@ function SwapRequestModal({
                 required
               >
                 <option value="">Select a skill you can offer</option>
-                {offeredSkills.map((skill) => (
-                  <option key={skill} style={optionStyle} value={skill}>
+                {offeredSkills.map((skill, idx) => (
+                  <option key={`${skill}-${idx}`} style={optionStyle} value={skill}>
                     {skill}
                   </option>
                 ))}
@@ -248,8 +248,8 @@ function SwapRequestModal({
                 required
               >
                 <option value="">Select a skill you want to learn</option>
-                {wantedSkills.map((skill) => (
-                  <option key={skill} style={optionStyle} value={skill}>
+                {wantedSkills.map((skill, idx) => (
+                  <option key={`${skill}-${idx}`} style={optionStyle} value={skill}>
                     {skill}
                   </option>
                 ))}
@@ -340,12 +340,8 @@ export default function UserProfilePage() {
       setCheckingConnection(true);
       try {
         // Check both sent and received
-        const sentRes = await fetch(
-          `http://localhost:4000/api/swap-requests/sent/${currentUserId}`,
-        );
-        const receivedRes = await fetch(
-          `http://localhost:4000/api/swap-requests/received/${currentUserId}`,
-        );
+        const sentRes = await fetch(`/api/swap-requests/sent/${currentUserId}`);
+        const receivedRes = await fetch(`/api/swap-requests/received/${currentUserId}`);
         let sent = [],
           received = [];
         if (sentRes.ok) sent = await sentRes.json();
@@ -820,9 +816,9 @@ export default function UserProfilePage() {
                                   {project.description}
                                 </p>
                                 <div className="flex gap-2 mt-2">
-                                  {project.tags.map((tag) => (
+                                  {project.tags.map((tag, idx) => (
                                     <span
-                                      key={tag}
+                                      key={`${tag}-${idx}`}
                                       className="px-2 py-1 text-xs rounded-full bg-gray-200 text-gray-700"
                                     >
                                       {tag}
@@ -971,9 +967,9 @@ export default function UserProfilePage() {
                             {project.description}
                           </p>
                           <div className="flex gap-2 flex-wrap">
-                            {project.tags.map((tag) => (
+                            {project.tags.map((tag, idx) => (
                               <span
-                                key={tag}
+                                key={`${tag}-${idx}`}
                                 className="px-3 py-1 text-sm rounded-full bg-gray-200 text-gray-700"
                               >
                                 {tag}

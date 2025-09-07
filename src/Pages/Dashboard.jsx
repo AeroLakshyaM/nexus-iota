@@ -53,7 +53,7 @@ function SwapRequestBadge() {
   const fetchPendingCount = async () => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/swap-requests/received/${currentUserId}`,
+        `/api/swap-requests/received/${currentUserId}`,
       );
       if (response.ok) {
         const requests = await response.json();
@@ -92,7 +92,7 @@ function ChatBadge() {
   const fetchUnreadCount = async () => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/chat/user/${currentUserId}`,
+        `/api/chat/user/${currentUserId}`,
       );
       if (response.ok) {
         const chats = await response.json();
@@ -292,7 +292,7 @@ export default function Dashboard() {
   // Fetch dashboard statistics
   const fetchStats = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/dashboard/stats");
+      const response = await fetch("/api/dashboard/stats");
       if (response.ok) {
         const data = await response.json();
         setStats(data);
@@ -308,7 +308,7 @@ export default function Dashboard() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("http://localhost:4000/api/dashboard/users");
+      const response = await fetch("/api/dashboard/users");
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));

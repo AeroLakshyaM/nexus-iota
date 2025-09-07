@@ -20,7 +20,7 @@ export default function ChatList() {
   const fetchActiveChats = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:4000/api/chat/user/${currentUserId}`);
+      const response = await fetch(`/api/chat/user/${currentUserId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch chats');
       }
@@ -192,4 +192,4 @@ export default function ChatList() {
       </main>
     </div>
   );
-} 
+}

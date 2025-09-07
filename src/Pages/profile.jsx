@@ -39,7 +39,7 @@ export default function UserProfilePage() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/profile")
+    fetch("/api/profile")
       .then((res) => res.json())
       .then((data) => {
         if (data) {
@@ -371,9 +371,9 @@ export default function UserProfilePage() {
                                   {project.description}
                                 </p>
                                 <div className="flex gap-2 mt-2">
-                                  {project.tags.map((tag) => (
+                                  {project.tags.map((tag, idx) => (
                                     <span
-                                      key={tag}
+                                      key={`${tag}-${idx}`}
                                       className="px-2 py-1 text-xs rounded-full bg-gray-200 text-gray-700"
                                     >
                                       {tag}
@@ -519,9 +519,9 @@ export default function UserProfilePage() {
                             {project.description}
                           </p>
                           <div className="flex gap-2 flex-wrap">
-                            {project.tags.map((tag) => (
+                            {project.tags.map((tag, idx) => (
                               <span
-                                key={tag}
+                                key={`${tag}-${idx}`}
                                 className="px-3 py-1 text-sm rounded-full bg-gray-200 text-gray-700"
                               >
                                 {tag}

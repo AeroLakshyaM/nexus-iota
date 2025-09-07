@@ -70,7 +70,7 @@ export default function UserProfilePage() {
     setIsLoading(true);
 
     // Fetch current user's basic data
-    fetch(`http://localhost:4000/api/users/${currentUserId}`)
+    fetch(`/api/users/${currentUserId}`)
       .then((res) => res.json())
       .then((userData) => {
         if (userData) {
@@ -82,7 +82,7 @@ export default function UserProfilePage() {
 
           // Fetch detailed profile data
           return fetch(
-            `http://localhost:4000/api/users/${currentUserId}/profile`,
+            `/api/users/${currentUserId}/profile`,
           );
         }
       })
@@ -513,9 +513,9 @@ export default function UserProfilePage() {
                                   {project.description}
                                 </p>
                                 <div className="flex gap-2">
-                                  {project.tags?.map((tag) => (
+                                  {project.tags?.map((tag, idx) => (
                                     <span
-                                      key={tag}
+                                      key={`${tag}-${idx}`}
                                       className="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700 font-medium"
                                     >
                                       {tag}
@@ -665,9 +665,9 @@ export default function UserProfilePage() {
                               {project.description}
                             </p>
                             <div className="flex gap-3 flex-wrap">
-                              {project.tags?.map((tag) => (
+                              {project.tags?.map((tag, idx) => (
                                 <span
-                                  key={tag}
+                                  key={`${tag}-${idx}`}
                                   className="px-4 py-2 text-sm rounded-full bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition-colors"
                                 >
                                   {tag}
