@@ -25,7 +25,7 @@ export default function SwapRequests() {
         ? `/api/swap-requests/received/${currentUserId}`
         : `/api/swap-requests/sent/${currentUserId}`;
       
-      const response = await fetch(`http://localhost:4000${endpoint}`);
+      const response = await fetch(endpoint);
       if (!response.ok) {
         throw new Error('Failed to fetch requests');
       }
@@ -40,7 +40,7 @@ export default function SwapRequests() {
 
   const handleRequestAction = async (requestId, action) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/swap-requests/${requestId}`, {
+      const response = await fetch(`/api/swap-requests/${requestId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -237,4 +237,4 @@ export default function SwapRequests() {
       </main>
     </div>
   );
-} 
+}
