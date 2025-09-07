@@ -20,7 +20,7 @@ async function initDb() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )`,
       [],
-      (err) => (err ? reject(err) : resolve()),
+      (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
     ),
   );
 
@@ -46,7 +46,7 @@ async function initDb() {
         socialLinks TEXT
       )`,
       [],
-      (err) => (err ? reject(err) : resolve()),
+      (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
     ),
   );
 
@@ -72,7 +72,7 @@ async function initDb() {
           JSON.stringify([]),
           JSON.stringify({ github: '', linkedin: '', twitter: '', website: '' }),
         ],
-        (err) => (err ? reject(err) : resolve()),
+        (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
       ),
     );
   }
@@ -101,7 +101,7 @@ async function initDb() {
         CONSTRAINT fk_user_profiles_user FOREIGN KEY (user_id) REFERENCES users (id)
       )`,
       [],
-      (err) => (err ? reject(err) : resolve()),
+      (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
     ),
   );
 
@@ -117,7 +117,7 @@ async function initDb() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )`,
       [],
-      (err) => (err ? reject(err) : resolve()),
+      (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
     ),
   );
 
@@ -134,7 +134,7 @@ async function initDb() {
         CONSTRAINT fk_user_skills_skill FOREIGN KEY (skill_id) REFERENCES skills (id)
       )`,
       [],
-      (err) => (err ? reject(err) : resolve()),
+      (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
     ),
   );
 
@@ -156,7 +156,7 @@ async function initDb() {
         CONSTRAINT fk_mod_reported_skill FOREIGN KEY (reported_skill_id) REFERENCES skills (id)
       )`,
       [],
-      (err) => (err ? reject(err) : resolve()),
+      (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
     ),
   );
 
@@ -170,7 +170,7 @@ async function initDb() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )`,
       [],
-      (err) => (err ? reject(err) : resolve()),
+      (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
     ),
   );
 
@@ -187,7 +187,7 @@ async function initDb() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )`,
       [],
-      (err) => (err ? reject(err) : resolve()),
+      (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
     ),
   );
 
@@ -208,7 +208,7 @@ async function initDb() {
         CONSTRAINT fk_sr_to_user FOREIGN KEY (to_user_id) REFERENCES users (id)
       )`,
       [],
-      (err) => (err ? reject(err) : resolve()),
+      (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
     ),
   );
 
@@ -227,7 +227,7 @@ async function initDb() {
         CONSTRAINT fk_notif_user FOREIGN KEY (user_id) REFERENCES users (id)
       )`,
       [],
-      (err) => (err ? reject(err) : resolve()),
+      (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
     ),
   );
 
@@ -246,7 +246,7 @@ async function initDb() {
         CONSTRAINT fk_cm_receiver FOREIGN KEY (receiver_id) REFERENCES users (id)
       )`,
       [],
-      (err) => (err ? reject(err) : resolve()),
+      (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
     ),
   );
 
@@ -276,7 +276,7 @@ async function initDb() {
         db.run(
           `INSERT INTO skills (name, category, swap_count) VALUES (?, ?, ?)`,
           [name, category, swap_count],
-          (err) => (err ? reject(err) : resolve()),
+          (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
         ),
       );
     }
@@ -320,7 +320,7 @@ async function initDb() {
           db.run(
             `INSERT INTO user_skills (user_id, skill_id) VALUES (?, ?)`,
             [userId, skillId],
-            (err) => (err ? reject(err) : resolve()),
+            (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
           ),
         );
       }
@@ -345,7 +345,7 @@ async function initDb() {
         db.run(
           `INSERT INTO moderation_reports (reporter_id, reported_user_id, reported_skill_id, reason) VALUES (?, ?, ?, ?)`,
           rep,
-          (err) => (err ? reject(err) : resolve()),
+          (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
         ),
       );
     }
