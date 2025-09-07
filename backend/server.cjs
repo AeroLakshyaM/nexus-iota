@@ -9,7 +9,7 @@ app.use(express.json());
 
 async function initDb() {
   // users
-  await new Promise((resolve, reject) =>
+  await new Promise((resolve) =>
     db.run(
       `CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -20,9 +20,15 @@ async function initDb() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )`,
       [],
-      (err) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); } resolve(); },
+      () => resolve(),
     ),
   );
+  // Ensure required columns exist if a pre-existing users table schema differs
+  await new Promise((resolve) => db.run(`ALTER TABLE users ADD COLUMN IF NOT EXISTS name TEXT`, [], () => resolve()));
+  await new Promise((resolve) => db.run(`ALTER TABLE users ADD COLUMN IF NOT EXISTS email TEXT`, [], () => resolve()));
+  await new Promise((resolve) => db.run(`ALTER TABLE users ADD COLUMN IF NOT EXISTS password TEXT`, [], () => resolve()));
+  await new Promise((resolve) => db.run(`ALTER TABLE users ADD COLUMN IF NOT EXISTS status TEXT`, [], () => resolve()));
+  await new Promise((resolve) => db.run(`ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMP`, [], () => resolve()));
 
   // profile (single record editable from /api/profile)
   await new Promise((resolve, reject) =>
