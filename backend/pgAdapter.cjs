@@ -17,7 +17,13 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-function run(sql, params = [], cb = () => {}) {
+function run(sql, params, cb) {
+  if (typeof params === 'function') {
+    cb = params; // shift
+    params = [];
+  }
+  if (!Array.isArray(params)) params = [];
+  if (typeof cb !== 'function') cb = () => {};
   const trimmed = sql.trim();
   const isInsert = /^insert\s+/i.test(trimmed);
   const hasReturning = /returning\s+id\b/i.test(trimmed);
@@ -35,14 +41,24 @@ function run(sql, params = [], cb = () => {}) {
     .catch((err) => cb.call({}, err));
 }
 
-function get(sql, params = [], cb = () => {}) {
+function get(sql, params, cb) {
+  if (typeof params === 'function') {
+    cb = params; params = [];
+  }
+  if (!Array.isArray(params)) params = [];
+  if (typeof cb !== 'function') cb = () => {};
   const { sql: text, params: values } = toPgParams(sql, params);
   pool.query(text, values)
     .then((result) => cb(null, result.rows[0]))
     .catch((err) => cb(err));
 }
 
-function all(sql, params = [], cb = () => {}) {
+function all(sql, params, cb) {
+  if (typeof params === 'function') {
+    cb = params; params = [];
+  }
+  if (!Array.isArray(params)) params = [];
+  if (typeof cb !== 'function') cb = () => {};
   const { sql: text, params: values } = toPgParams(sql, params);
   pool.query(text, values)
     .then((result) => cb(null, result.rows))
