@@ -39,7 +39,7 @@ export default function UserProfilePage() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/profile")
+    fetch("/api/profile")
       .then((res) => res.json())
       .then((data) => {
         if (data) {
