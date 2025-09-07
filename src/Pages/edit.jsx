@@ -230,7 +230,7 @@ export default function EditProfilePage() {
 
           // Fetch detailed profile data
           return fetch(
-            `http://localhost:4000/api/users/${currentUserId}/profile`,
+            `/api/users/${currentUserId}/profile`,
           );
         }
       })
@@ -409,7 +409,7 @@ export default function EditProfilePage() {
 
       // Update user's detailed profile info
       const profileResponse = await fetch(
-        `http://localhost:4000/api/users/${currentUserId}/profile`,
+        `/api/users/${currentUserId}/profile`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
