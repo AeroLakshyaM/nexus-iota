@@ -7,6 +7,33 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+function deriveUsername(name, email) {
+  const base = (name && name.trim()) ? name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '') : (email || '').split('@')[0];
+  return base || `user${Math.floor(Math.random()*10000)}`;
+}
+
+function insertUserFlexible({ name, email, password, username, status }, cb) {
+  const uname = username || deriveUsername(name, email);
+  const pwd = password || 'password123';
+  const st = status || 'active';
+  const attempts = [
+    { sql: 'INSERT INTO users (name, email, password, username, status) VALUES (?, ?, ?, ?, ?)', vals: [name, email, pwd, uname, st] },
+    { sql: 'INSERT INTO users (name, email, password, username) VALUES (?, ?, ?, ?)', vals: [name, email, pwd, uname] },
+    { sql: 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)', vals: [name, email, pwd] },
+    { sql: 'INSERT INTO users (name, email) VALUES (?, ?)', vals: [name, email] },
+  ];
+  (function tryIdx(i){
+    if (i >= attempts.length) return cb(new Error('Failed to insert user with available schemas'));
+    const { sql, vals } = attempts[i];
+    db.run(sql, vals, function(err){
+      if (err && (err.code === '42703' || err.code === '23502')) {
+        return tryIdx(i+1);
+      }
+      cb.call(this, err);
+    });
+  })(0);
+}
+
 async function initDb() {
   // users
   await new Promise((resolve) =>
@@ -301,10 +328,11 @@ async function initDb() {
     ];
     for (const [name, email] of sampleUsers) {
       // eslint-disable-next-line no-await-in-loop
-      await new Promise((resolve, reject) =>
-        db.run(`INSERT INTO users (name, email) VALUES (?, ?)`, [name, email], (err) =>
-          err ? reject(err) : resolve(),
-        ),
+      await new Promise((resolve) =>
+        insertUserFlexible({ name, email, password: 'password123' }, function(err){
+          if (err) console.warn('Seed user insert warning:', err && err.message ? err.message : err);
+          resolve();
+        }),
       );
     }
 
@@ -369,6 +397,16 @@ app.get('/', (req, res) => {
 // Users
 app.get('/api/users', (req, res) => {
   db.all('SELECT id, name, email, status, created_at FROM users ORDER BY id ASC', [], (err, rows) => {
+    if (err && err.code === '42703') {
+      // Fallback if status column doesn't exist
+      return db.all('SELECT id, name, email, created_at FROM users ORDER BY id ASC', [], (e2, rows2) => {
+        if (e2) {
+          console.error('GET /api/users error:', e2);
+          return res.status(500).json({ error: e2.message });
+        }
+        res.json(rows2 || []);
+      });
+    }
     if (err) {
       console.error('GET /api/users error:', err);
       return res.status(500).json({ error: err.message });
@@ -482,14 +520,13 @@ app.post('/api/users', (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) return res.status(400).json({ error: 'Name, email, and password are required.' });
 
-  db.run('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, password], function (err) {
+  insertUserFlexible({ name, email, password }, function (err) {
     if (err) {
-      // Duplicate key (unique_violation)
       if (err.code === '23505') {
         return res.status(400).json({ message: 'Email already exists' });
       }
       console.error('POST /api/users error:', err);
-      return res.status(500).json({ error: err.message });
+      return res.status(500).json({ error: err.message || String(err) });
     }
     res.json({ id: this.lastID, name, email });
   });
