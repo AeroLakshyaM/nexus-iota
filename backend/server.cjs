@@ -368,9 +368,12 @@ app.get('/', (req, res) => {
 
 // Users
 app.get('/api/users', (req, res) => {
-  db.all('SELECT * FROM users', [], (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(rows);
+  db.all('SELECT id, name, email, status, created_at FROM users ORDER BY id ASC', [], (err, rows) => {
+    if (err) {
+      console.error('GET /api/users error:', err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(rows || []);
   });
 });
 
@@ -480,7 +483,14 @@ app.post('/api/users', (req, res) => {
   if (!name || !email || !password) return res.status(400).json({ error: 'Name, email, and password are required.' });
 
   db.run('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, password], function (err) {
-    if (err) return res.status(500).json({ error: err.message });
+    if (err) {
+      // Duplicate key (unique_violation)
+      if (err.code === '23505') {
+        return res.status(400).json({ message: 'Email already exists' });
+      }
+      console.error('POST /api/users error:', err);
+      return res.status(500).json({ error: err.message });
+    }
     res.json({ id: this.lastID, name, email });
   });
 });
