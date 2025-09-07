@@ -34,7 +34,7 @@ export default function Chat() {
   const fetchSwapRequestDetails = async () => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/swap-requests/received/${currentUserId}`,
+        `/api/swap-requests/received/${currentUserId}`,
       );
       if (response.ok) {
         const requests = await response.json();
@@ -43,7 +43,7 @@ export default function Chat() {
         if (!request) {
           // Try sent requests
           const sentResponse = await fetch(
-            `http://localhost:4000/api/swap-requests/sent/${currentUserId}`,
+            `/api/swap-requests/sent/${currentUserId}`,
           );
           if (sentResponse.ok) {
             const sentRequests = await sentResponse.json();
@@ -73,7 +73,7 @@ export default function Chat() {
     try {
       setLoading(true);
       const response = await fetch(
-        `http://localhost:4000/api/chat/${swapRequestId}`,
+        `/api/chat/${swapRequestId}`,
       );
       if (!response.ok) {
         throw new Error("Failed to fetch messages");
@@ -94,7 +94,7 @@ export default function Chat() {
     try {
       // Mark chat message notifications as read
       const response = await fetch(
-        `http://localhost:4000/api/notifications/${currentUserId}`,
+        `/api/notifications/${currentUserId}`,
       );
       if (response.ok) {
         const notifications = await response.json();
@@ -105,7 +105,7 @@ export default function Chat() {
         // Mark each unread chat notification as read
         for (const notification of chatNotifications) {
           await fetch(
-            `http://localhost:4000/api/notifications/${notification.id}/read`,
+            `/api/notifications/${notification.id}/read`,
             {
               method: "PUT",
             },
@@ -123,7 +123,7 @@ export default function Chat() {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/chat/${swapRequestId}`,
+        `/api/chat/${swapRequestId}`,
         {
           method: "POST",
           headers: {
