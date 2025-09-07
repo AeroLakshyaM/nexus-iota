@@ -69,7 +69,7 @@ function SwapRequestModal({
         return;
       }
 
-      const response = await fetch("http://localhost:4000/api/swap-requests", {
+      const response = await fetch("/api/swap-requests", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
