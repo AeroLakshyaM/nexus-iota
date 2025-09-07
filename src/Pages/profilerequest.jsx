@@ -340,12 +340,8 @@ export default function UserProfilePage() {
       setCheckingConnection(true);
       try {
         // Check both sent and received
-        const sentRes = await fetch(
-          `http://localhost:4000/api/swap-requests/sent/${currentUserId}`,
-        );
-        const receivedRes = await fetch(
-          `http://localhost:4000/api/swap-requests/received/${currentUserId}`,
-        );
+        const sentRes = await fetch(`/api/swap-requests/sent/${currentUserId}`);
+        const receivedRes = await fetch(`/api/swap-requests/received/${currentUserId}`);
         let sent = [],
           received = [];
         if (sentRes.ok) sent = await sentRes.json();
