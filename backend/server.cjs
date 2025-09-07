@@ -382,12 +382,7 @@ async function initDb() {
   }
 }
 
-// Initialize DB on startup
-initDb().catch((e) => {
-  // eslint-disable-next-line no-console
-  console.error('DB init failed', e);
-  console.warn('Continuing without completing DB initialization. Some features may be limited.');
-});
+// DB initialization will be performed before the server starts listening. The init call is deferred until after routes are registered.
 
 // Routes
 app.get('/', (req, res) => {
@@ -1083,6 +1078,19 @@ app.get('/api/chat/user/:userId', (req, res) => {
   );
 });
 
-const PORT = 4000;
-const HOST = '127.0.0.1';
-app.listen(PORT, HOST, () => console.log(`Server running on http://${HOST}:${PORT}`));
+// Initialize DB then start the server
+initDb()
+  .then(() => {
+    const PORT = 4000;
+    const HOST = '127.0.0.1';
+    console.log('DB initialized successfully. Starting server...');
+    app.listen(PORT, HOST, () => console.log(`Server running on http://${HOST}:${PORT}`));
+  })
+  .catch((e) => {
+    // eslint-disable-next-line no-console
+    console.error('DB init failed', e);
+    console.warn('Continuing to start server despite DB init failure. Some features may be limited.');
+    const PORT = 4000;
+    const HOST = '127.0.0.1';
+    app.listen(PORT, HOST, () => console.log(`Server running on http://${HOST}:${PORT}`));
+  });
