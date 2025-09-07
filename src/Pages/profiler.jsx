@@ -513,9 +513,9 @@ export default function UserProfilePage() {
                                   {project.description}
                                 </p>
                                 <div className="flex gap-2">
-                                  {project.tags?.map((tag) => (
+                                  {project.tags?.map((tag, idx) => (
                                     <span
-                                      key={tag}
+                                      key={`${tag}-${idx}`}
                                       className="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-700 font-medium"
                                     >
                                       {tag}
@@ -665,9 +665,9 @@ export default function UserProfilePage() {
                               {project.description}
                             </p>
                             <div className="flex gap-3 flex-wrap">
-                              {project.tags?.map((tag) => (
+                              {project.tags?.map((tag, idx) => (
                                 <span
-                                  key={tag}
+                                  key={`${tag}-${idx}`}
                                   className="px-4 py-2 text-sm rounded-full bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition-colors"
                                 >
                                   {tag}
