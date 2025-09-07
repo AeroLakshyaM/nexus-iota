@@ -285,7 +285,7 @@ export default function Signup() {
     setErrors({});
 
     try {
-      await axios.post("http://localhost:4000/api/users", {
+      await axios.post("/api/users", {
         name: formData.name,
         email: formData.email,
         password: formData.password,
