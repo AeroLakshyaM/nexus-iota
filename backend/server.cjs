@@ -52,8 +52,7 @@ async function initDb() {
 
   // ensure default profile row exists
   const countRow = await new Promise((resolve, reject) =>
-    db.get(`SELECT COUNT(*) as count FROM profile`, [], (err, row) =>
-      err ? reject(err) : resolve(row),
+    db.get(`SELECT COUNT(*) as count FROM profile`, [], (err, row) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); resolve(null); } else resolve(row); },
     ),
   );
   if (!countRow || Number(countRow.count) === 0) {
@@ -252,8 +251,7 @@ async function initDb() {
 
   // seed skills
   const skillsCount = await new Promise((resolve, reject) =>
-    db.get(`SELECT COUNT(*) as count FROM skills`, [], (err, row) =>
-      err ? reject(err) : resolve(row),
+    db.get(`SELECT COUNT(*) as count FROM skills`, [], (err, row) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); resolve(null); } else resolve(row); },
     ),
   );
   if (!skillsCount || Number(skillsCount.count) === 0) {
@@ -284,8 +282,7 @@ async function initDb() {
 
   // seed users
   const userCount = await new Promise((resolve, reject) =>
-    db.get(`SELECT COUNT(*) as count FROM users`, [], (err, row) =>
-      err ? reject(err) : resolve(row),
+    db.get(`SELECT COUNT(*) as count FROM users`, [], (err, row) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); resolve(null); } else resolve(row); },
     ),
   );
   if (!userCount || Number(userCount.count) === 0) {
@@ -329,8 +326,7 @@ async function initDb() {
 
   // seed moderation reports
   const modCount = await new Promise((resolve, reject) =>
-    db.get(`SELECT COUNT(*) as count FROM moderation_reports`, [], (err, row) =>
-      err ? reject(err) : resolve(row),
+    db.get(`SELECT COUNT(*) as count FROM moderation_reports`, [], (err, row) => { if (err) { console.warn('DB init warning:', err && err.message ? err.message : err); resolve(null); } else resolve(row); },
     ),
   );
   if (!modCount || Number(modCount.count) === 0) {
