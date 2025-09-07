@@ -218,7 +218,7 @@ export default function EditProfilePage() {
     }
 
     // Fetch current user's data
-    fetch(`http://localhost:4000/api/users/${currentUserId}`)
+    fetch(`/api/users/${currentUserId}`)
       .then((res) => res.json())
       .then((userData) => {
         if (userData) {
@@ -389,7 +389,7 @@ export default function EditProfilePage() {
     try {
       // Update user's basic info in users table
       const basicResponse = await fetch(
-        `http://localhost:4000/api/users/${currentUserId}`,
+        `/api/users/${currentUserId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
